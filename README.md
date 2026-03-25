@@ -103,17 +103,18 @@ Confirmed from the ransom note and file listing screenshots. Files under `C:\Sha
 
 **Answer:** `sync.cloud-endpoint.net`
 
-**`1/15/2026 04:52 UTC` — `as-pc2` — `david.mitchell`**
+**`1/27/2026  20:22:26 UTC` — `as-pc2` — `david.mitchell`**
 
 `DeviceNetworkEvents` was queried for outbound connections from common download utilities. `wsync.exe` and `powershell.exe` on `as-pc2` made repeated connections to `sync.cloud-endpoint.net` starting from the initial staging date. This domain served as the primary C2 and payload delivery point throughout the attack.
 
 ```kql
 DeviceNetworkEvents
-| where Timestamp between (datetime(2026-01-27T18:00:00Z) .. datetime(2026-01-27T22:18:00Z))
-| where InitiatingProcessFileName in~ ("powershell.exe", "cmd.exe", "certutil.exe", "bitsadmin.exe")
-| where not(RemoteUrl has_any ("microsoft.com", "windowsupdate.com"))
-| project Timestamp, DeviceName, RemoteUrl, RemoteIP, RemotePort, InitiatingProcessFileName
-| order by Timestamp asc
+| where TimeGenerated between (datetime(2026-01-27 20:00:00) .. datetime(2026-01-27 23:00:00 ) )
+| where DeviceName == "as-pc2"
+| where ActionType == "ConnectionSuccess"
+| where InitiatingProcessAccountDomain != "nt authority" and isnotempty( RemoteUrl)
+| project TimeGenerated, ActionType, RemoteUrl
+| order by TimeGenerated asc 
 ```
 <img width="700" height="371" alt="image" src="https://github.com/user-attachments/assets/6ef27cc3-3467-42d1-9ff4-8223f6ed5e2f" />
 
@@ -125,19 +126,20 @@ DeviceNetworkEvents
 
 **Answer:** `cdn.cloud-endpoint.net`
 
-**`1/15/2026 05:15 UTC` — `as-srv`**
+**`1/27/2026 22:18:22.UTC` — `as-srv`**
 
 Reviewing `DeviceNetworkEvents` for C2 infrastructure, a second domain `cdn.cloud-endpoint.net` was identified. Used specifically for staging and delivering the ransomware payload to `as-srv` in the final phase of the attack.
 
 ```kql
 DeviceNetworkEvents
-| where TimeGenerated between (datetime(2026-01-15 05:15:00) .. datetime(2026-01-28 23:00:00))
+| where TimeGenerated between (datetime(2026-01-27 20:00:00) .. datetime(2026-01-27 23:00:00 ) )
+| where DeviceName == "as-srv"
 | where ActionType == "ConnectionSuccess"
-| where RemoteUrl has_any ("cdn.cloud-endpoint.net", "sync.cloud-endpoint.net")
-| where InitiatingProcessAccountName != "system"
-| project TimeGenerated, DeviceName, RemoteUrl, RemoteIP
-| order by TimeGenerated asc
+| where InitiatingProcessAccountDomain != "nt authority" and isnotempty( RemoteUrl)
+| project TimeGenerated, ActionType, RemoteUrl
+| order by TimeGenerated asc 
 ```
+<img width="700" height="400" alt="image" src="https://github.com/user-attachments/assets/2c753cc3-77c3-4964-8980-7a4102ee7e73" />
 
 ---
 
@@ -151,14 +153,15 @@ Both C2 domains resolved to two IPs throughout the attack. Observed in connectio
 
 ```kql
 DeviceNetworkEvents
-| where TimeGenerated between (datetime(2026-01-15 05:15:00) .. datetime(2026-01-28 23:00:00))
+| where TimeGenerated between (datetime(2026-01-27 20:00:00) .. datetime(2026-01-27 23:00:00 ) )
 | where ActionType == "ConnectionSuccess"
-| where DeviceName contains "as-pc1"
+| where DeviceName contains "as-srv"
 | where RemoteUrl has_any ("cdn.cloud-endpoint.net", "sync.cloud-endpoint.net")
 | where InitiatingProcessAccountName != "system"
 | project TimeGenerated, DeviceName, RemoteUrl, RemoteIP
 | order by TimeGenerated asc
 ```
+<img width="699" height="400" alt="image" src="https://github.com/user-attachments/assets/ba0e53e3-d125-4714-8237-a35486f0aba2" />
 
 ---
 
@@ -174,12 +177,13 @@ AnyDesk relay connections reviewed across all compromised hosts. `relay-0b975d23
 
 ```kql
 DeviceNetworkEvents
-| where TimeGenerated between (datetime(2026-01-15 05:15:00) .. datetime(2026-01-28 23:00:00))
+| where TimeGenerated between (datetime(2026-01-27 20:00:00) .. datetime(2026-01-27 23:00:00 ) )
 | where ActionType == "ConnectionSuccess"
 | where RemoteUrl contains "relay"
 | where InitiatingProcessAccountName != "system"
 | project TimeGenerated, DeviceName, RemoteUrl, RemoteIP
 ```
+<img width="700" height="348" alt="image" src="https://github.com/user-attachments/assets/66fb556f-f861-418a-9f99-d5b02aceba49" />
 
 ---
 
@@ -195,11 +199,12 @@ DeviceNetworkEvents
 
 ```kql
 DeviceFileEvents
-| where TimeGenerated between (datetime(2026-01-27 03:00:00) .. datetime(2026-01-28 23:00:00))
-| where DeviceName has_any ("as-pc1", "as-pc2", "as-srv")
+| where TimeGenerated between (datetime(2026-01-27 18:00:00) .. datetime(2026-01-27 23:00:00))
+| where DeviceName has_any ("as-pc2", "as-srv")
 | where FileName endswith ".bat"
 | project TimeGenerated, ActionType, FileName
 ```
+<img width="699" height="347" alt="image" src="https://github.com/user-attachments/assets/96565df9-6319-4842-8eb9-a4afb7e1a1a4" />
 
 ---
 
@@ -213,11 +218,12 @@ SHA256 of `kill.bat` retrieved from `DeviceFileEvents`. Dropped by `wsync.exe` o
 
 ```kql
 DeviceFileEvents
-| where TimeGenerated between (datetime(2026-01-27 03:00:00) .. datetime(2026-01-28 23:00:00))
-| where DeviceName has_any ("as-pc1", "as-pc2", "as-srv")
+| where TimeGenerated between (datetime(2026-01-27 18:00:00) .. datetime(2026-01-27 23:00:00))
+| where DeviceName has_any ("as-pc2", "as-srv")
 | where FileName endswith ".bat"
 | project TimeGenerated, ActionType, FileName, SHA256
 ```
+<img width="900" height="361" alt="image" src="https://github.com/user-attachments/assets/2771fb8e-d150-46ba-a59f-04f0c31e4414" />
 
 ---
 
