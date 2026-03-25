@@ -1,10 +1,5 @@
 # Akira Ransomware — Ashford Sterling Recruitment
 
-## Evidence
-
-| Ransom Note | Encrypted Files | Negotiation Chat |
-|:-----------:|:---------------:|:----------------:|
-| [![Ransom Note](./challenges/akira-ashford-sterling/ransom_note.png)](./challenges/akira-ashford-sterling/ransom_note.png) | [![Encrypted Files](./challenges/akira-ashford-sterling/encrypted_files.png)](./challenges/akira-ashford-sterling/encrypted_files.png) | [![Akira Chat](./challenges/akira-ashford-sterling/akira_chat.png)](./challenges/akira-ashford-sterling/akira_chat.png) |
 
 ---
 
