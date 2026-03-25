@@ -35,7 +35,7 @@
 
 The `akira_readme` file was dropped across all encrypted directories. It contains the TOR negotiation address, victim ID, AES-256 encryption claim, and a 72-hour deadline before data publication.
 
-<img width="705" height="726" alt="image" src="https://github.com/user-attachments/assets/a5b08898-fd0e-464e-9cbd-d6c0865ac22e" />
+<img width="600" height="600" alt="image" src="https://github.com/user-attachments/assets/a5b08898-fd0e-464e-9cbd-d6c0865ac22e" />
 
 
 ---
@@ -44,15 +44,15 @@ The `akira_readme` file was dropped across all encrypted directories. It contain
 
 The file server share `C:\Shares\` was fully encrypted. All business-critical folders — Backups, Clients, Compliance, Contractors, and Payroll — were hit with the `.akira` extension appended to every file. Encryption timestamp: `1/27/2026 22:18 UTC`.
 
-[![Encrypted Files](./challenges/akira-ashford-sterling/encrypted_files.png)](./challenges/akira-ashford-sterling/encrypted_files.png)
+
+<img width="600" height="600" alt="image" src="https://github.com/user-attachments/assets/c8f24116-b8ff-4abc-9f82-271dde465e97" />
 
 ---
 
 ### Ransom Negotiation
 
 The victim engaged the threat actor via the TOR-hosted **Akira Secure Chat** portal. Initial demand: **£65,000**. Victim counter: **£11,000**. Attacker issued a 48-hour ultimatum — confirming active double-extortion.
-
-[![Akira Negotiation Chat](./challenges/akira-ashford-sterling/akira_chat.png)](./challenges/akira-ashford-sterling/akira_chat.png)
+<img width="560" height="500" alt="image" src="https://github.com/user-attachments/assets/87496e35-e69a-4bd5-abc2-ba463921f5ca" />
 
 ---
 
