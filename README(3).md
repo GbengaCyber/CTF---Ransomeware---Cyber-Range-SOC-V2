@@ -35,7 +35,8 @@
 
 The `akira_readme` file was dropped across all encrypted directories. It contains the TOR negotiation address, victim ID, AES-256 encryption claim, and a 72-hour deadline before data publication.
 
-[[![Ransom Note](./challenges/akira-ashford-sterling/ransom_note.png)](./challenges/akira-ashford-sterling/ransom_note.png)](https://lh7-rt.googleusercontent.com/formsz/AN7BsVCF4-4TXR9jYKWTtoDc1goyRIa4KDlihLahsN9RpyQX-Jopk2-M8idCGxSLj9tfvm8hvpmqCm53sbHTK7lD_DcmpIAjjUxzwFkIwkdfedUBKz6HsS3rr1KM92WdGZravwna8Gd8rqwkZgTrBhvwrtgAW4dGtuXt28_iYh2hGEf-4WVe2ztNzXae0eEqvrtfGWQranHU4elW7ln8=w705?key=r747uMsoLYRjmg-LSMW6mA)
+<img width="705" height="726" alt="image" src="https://github.com/user-attachments/assets/a5b08898-fd0e-464e-9cbd-d6c0865ac22e" />
+
 
 ---
 
