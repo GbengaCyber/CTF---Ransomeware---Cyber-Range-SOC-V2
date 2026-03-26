@@ -73,7 +73,6 @@ The ransom note was delivered via a TOR-based chat portal branded **"Akira Secur
 
 The TOR address was found in the `akira_readme` ransom note dropped on the victim system. The note also contained a victim-specific Personal ID, AES-256 encryption claim, and a 72-hour deadline before data publication. Identified from artefact — no KQL required.
 
-> ⚠️ Note: `akiral2iz` — the `l` (lowercase L) is easily misread as `1` in monospace fonts.
 
 ---
 
