@@ -102,7 +102,7 @@ Confirmed from the ransom note and file listing screenshots. Files under `C:\Sha
 
 **Answer:** `sync.cloud-endpoint.net`
 
-**`1/27/2026  20:22:26 UTC` — `as-pc2` — `david.mitchell`**
+**`1/27/2026  20:22:26 UTC`  `as-pc2`  `david.mitchell`**
 
 `DeviceNetworkEvents` was queried for outbound connections from common download utilities. `wsync.exe` and `powershell.exe` on `as-pc2` made repeated connections to `sync.cloud-endpoint.net` starting from the initial staging date. This domain served as the primary C2 and payload delivery point throughout the attack.
 
@@ -170,7 +170,7 @@ DeviceNetworkEvents
 
 **Answer:** `relay-0b975d23.net.anydesk.com`
 
-**`1/27/2026 22:08 UTC` — `as-srv`**
+**`1/27/2026 22:08 UTC`  `as-srv`**
 
 AnyDesk relay connections reviewed across all compromised hosts. `relay-0b975d23.net.anydesk.com` was the last relay connection on `as-srv` — active 10 minutes before ransomware deployment, confirming the attacker maintained remote access right up to encryption.
 
@@ -242,7 +242,7 @@ Windows Defender disabled via registry modification setting `DisableAntiSpyware 
 
 **Answer:** `21:03:42`
 
-**`1/27/2026 21:03 UTC` — `as-pc2`**
+**`1/27/2026 21:03 UTC`  `as-pc2`**
 
 `DeviceRegistryEvents` filtered for Defender-related registry modifications. `DisableAntiSpyware` set to `1` via `reg add` at `21:03:42` — approximately 75 minutes before encryption.
 
@@ -266,7 +266,7 @@ DeviceRegistryEvents
 
 **Answer:** `tasklist | findstr lsass`
 
-**`1/27/2026 21:14 UTC` — `as-pc2` — `david.mitchell`**
+**`1/27/2026 21:14 UTC`  `as-pc2`  `david.mitchell`**
 
 `DeviceProcessEvents` queried for process enumeration commands. `wsync.exe` spawned `cmd.exe` which ran `tasklist | findstr lsass` twice — at `21:11` and `21:14` — confirming the attacker was locating LSASS before credential dumping.
 
@@ -288,7 +288,7 @@ DeviceProcessEvents
 
 **Answer:** `\Device\NamedPipe\lsass`
 
-**`1/27/2026 21:42 UTC` — `as-pc2`**
+**`1/27/2026 21:42 UTC`  `as-pc2`**
 
 `DeviceEvents` filtered for `NamedPipeEvent` actions referencing `lsass`. The pipe `\Device\NamedPipe\lsass` was accessed on `as-pc2` at `21:42` — following process enumeration at `21:11/21:14` — consistent with credential dumping against LSASS.
 
@@ -331,7 +331,7 @@ DeviceFileEvents
 
 **Answer:** `C:\Users\Public`
 
-**`1/15/2026 04:40 UTC` — `as-pc2`**
+**`1/15/2026 04:40 UTC`  `as-pc2`**
 
 `DeviceFileEvents` queried for `AnyDesk.exe`. The binary was dropped into `C:\Users\Public\` — a world-writable directory — rather than the legitimate install path, confirming manual staging by the attacker.
 
@@ -353,7 +353,7 @@ DeviceFileEvents
 
 **Answer:** `88.97.164.155`
 
-**`1/27/2026 19:29 UTC` — `as-pc2` — `david.mitchell`**
+**`1/27/2026 19:29 UTC`  `as-pc2`  `david.mitchell`**
 
 AnyDesk network connections on `as-pc2` reviewed. Most traffic resolved to known AnyDesk relay infrastructure. Two connections had no `RemoteUrl` — raw IP only — indicating inbound connections. Both resolved to `88.97.164.155`, confirming this as the attacker's external IP.
 
@@ -376,7 +376,7 @@ DeviceNetworkEvents
 
 **Answer:** `wsync.exe`
 
-**`1/27/2026 20:22 UTC` — `as-pc2`**
+**`1/27/2026 20:22 UTC`  `as-pc2`**
 
 `DeviceFileEvents` queried for executables dropped into staging directories. `wsync.exe` dropped into `C:\ProgramData\` by `powershell.exe`. Masquerades as a Windows sync utility — responsible for all C2 comms, payload delivery, and spawning attacker commands.
 
@@ -399,7 +399,7 @@ DeviceFileEvents
 
 **Answer:** `C:\ProgramData`
 
-**`1/27/2026 20:22 UTC` — `as-pc2`**
+**`1/27/2026 20:22 UTC`  `as-pc2`**
 
 Confirmed from Q19 query. `wsync.exe` consistently written to `C:\ProgramData\wsync.exe` across all three drop events.
 
@@ -414,7 +414,7 @@ Confirmed from Q19 query. `wsync.exe` consistently written to `C:\ProgramData\ws
 
 **Answer:** `66b876c52946f4aed47dd696d790972ff265b6f4451dab54245bc4ef1206d90b`
 
-**`1/27/2026 20:22 UTC` — `as-pc2`**
+**`1/27/2026 20:22 UTC`  `as-pc2`**
 
 Three drops of `wsync.exe` observed. The first at `20:22` carried a different SHA256 — the original beacon that failed to maintain stable C2 communications.
 
@@ -426,7 +426,7 @@ Three drops of `wsync.exe` observed. The first at `20:22` carried a different SH
 
 **Answer:** `0072ca0d0adc9a1b2e1625db4409f57fc32b5a09c414786bf08c4d8e6a073654`
 
-**`1/27/2026 20:44 UTC` — `as-pc2`**
+**`1/27/2026 20:44 UTC`  `as-pc2`**
 
 Replacement beacon dropped at `20:44` with a different SHA256. This version maintained stable C2 and drove all subsequent attack activity.
 
@@ -448,7 +448,7 @@ DeviceFileEvents
 
 **Answer:** `scan.exe`
 
-**`1/27/2026 20:17 UTC` — `as-pc2` — `david.mitchell`**
+**`1/27/2026 20:17 UTC`  `as-pc2`  `david.mitchell`**
 
 `DeviceFileEvents` filtered for executables in user directories. `scan.exe` downloaded to `C:\Users\david.mitchell\Downloads\` — an NSIS self-extracting installer that unpacked Advanced IP Scanner for network reconnaissance.
 
@@ -490,7 +490,7 @@ DeviceFileEvents
 
 **Answer:** `/portable "C:/Users/david.mitchell/Downloads/" /lng en_us`
 
-**`1/27/2026 20:17 UTC` — `as-pc2` — `david.mitchell`**
+**`1/27/2026 20:17 UTC`  `as-pc2`  `david.mitchell`**
 
 `scan.exe` showed no arguments directly. Child process analysis: `scan.exe` → `scan.tmp` (NSIS extractor) → `advanced_ip_scanner.exe` with `/portable` flag — avoiding installation to leave minimal forensic trace.
 
@@ -513,7 +513,7 @@ DeviceProcessEvents
 
 **Answer:** `10.1.0.154, 10.1.0.183`
 
-**`1/27/2026 22:17 UTC` — `as-srv`**
+**`1/27/2026 22:17 UTC`  `as-srv`**
 
 `DeviceNetworkEvents` filtered for SMB (port 445) connections to internal IPs, excluding bulk scanner traffic. Two targeted connections from `as-srv` at `22:17` — 2 minutes before encryption — identified `as-pc1` (`10.1.0.154`) and `as-pc2` (`10.1.0.183`). Confirmed by `net view` commands in process logs.
 
@@ -557,7 +557,7 @@ DeviceLogonEvents
 
 **Answer:** `bitsadmin.exe`
 
-**`1/27/2026 20:14 UTC` — `as-pc2` — `david.mitchell`**
+**`1/27/2026 20:14 UTC`  `as-pc2`  `david.mitchell`**
 
 `DeviceProcessEvents` filtered for LOLBIN download commands. `bitsadmin.exe` failed multiple times — doubled destination path, non-existent `C:\Temp\` — before succeeding on the fourth attempt to `Downloads\`.
 
@@ -593,7 +593,7 @@ After `bitsadmin` issues, the attacker switched to `Invoke-WebRequest`. Used acr
 
 **Answer:** `st.exe`
 
-**`1/27/2026 22:24:09 UTC` — `as-srv`**
+**`1/27/2026 22:24:09 UTC`  `as-srv`**
 
 `DeviceFileEvents` queried for archive creation. `st.exe` created `exfil_data.zip` at `C:\Users\Public\` — 6 minutes after encryption — staged for exfiltration.
 
@@ -637,7 +637,7 @@ DeviceFileEvents
 
 **Answer:** `exfil_data.zip`
 
-**`1/27/2026 22:24:09 UTC` — `as-srv`**
+**`1/27/2026 22:24:09 UTC`  `as-srv`**
 
 `st.exe` created `exfil_data.zip` in `C:\Users\Public\`. Exfiltrated to `sync.cloud-endpoint.net` via `Invoke-WebRequest` POST at `22:24:55`.
 
@@ -660,7 +660,7 @@ DeviceFileEvents
 
 **Answer:** `updater.exe`
 
-**`1/27/2026 22:18:29 UTC` — `as-srv`**
+**`1/27/2026 22:18:29 UTC`  `as-srv`**
 
 `DeviceProcessEvents` reviewed around the encryption timestamp. `updater.exe` executed from `C:\ProgramData\` by `powershell.exe`. Named to blend with the legitimate Google Updater process on the same host. Immediately spawned `wevtutil.exe` to clear five Windows event logs.
 
@@ -701,7 +701,7 @@ DeviceProcessEvents
 
 **Answer:** `powershell.exe`
 
-**`1/27/2026 22:15 UTC` — `as-srv`**
+**`1/27/2026 22:15 UTC`  `as-srv`**
 
 `DeviceFileEvents` filtered for `FileCreated` in the encryption window confirmed `powershell.exe` staged `updater.exe` into `C:\ProgramData\` immediately before execution.
 
@@ -723,7 +723,7 @@ DeviceFileEvents
 
 **Answer:** `vssadmin  delete shadows /all /quiet`
 
-**`1/27/2026 21:09 UTC` — `as-pc2` — `david.mitchell`**
+**`1/27/2026 21:09 UTC`  `as-pc2`  `david.mitchell`**
 
 Three recovery prevention commands executed in rapid succession via `cmd.exe` as part of `kill.bat`: `vssadmin delete shadows /all /quiet`, `wmic shadowcopy delete`, and `bcdedit /set {default} recoveryenabled No`. All shadow copies deleted and Windows Recovery disabled before ransomware deployment.
 
@@ -745,7 +745,7 @@ DeviceProcessEvents
 
 **Answer:** `updater.exe`
 
-**`1/27/2026 22:18:33 UTC` — `as-srv`**
+**`1/27/2026 22:18:33 UTC`  `as-srv`**
 
 `DeviceFileEvents` filtered for `.txt` creation. `updater.exe` dropped `akira_readme.txt` four times at `22:18:33` — 4 seconds after execution — confirming the ransomware handles both encryption and ransom note delivery.
 
@@ -777,7 +777,7 @@ Identified from Q37 query. `akira_readme.txt` first created at `22:18:33 UTC`, 4
 
 **Answer:** `clean.bat`
 
-**`1/27/2026 22:20:27 UTC` — `as-srv`**
+**`1/27/2026 22:20:27 UTC`  `as-srv`**
 
 `DeviceProcessEvents` reviewed post-encryption. `powershell.exe` executed `cmd.exe /c C:\ProgramData\clean.bat` at `22:20:27` — 2 minutes after ransomware execution. Downloaded earlier as `kill.bat`, responsible for removing `updater.exe` and other artefacts.
 
