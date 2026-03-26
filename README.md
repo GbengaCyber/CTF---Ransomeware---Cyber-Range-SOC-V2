@@ -125,7 +125,7 @@ DeviceNetworkEvents
 
 **Answer:** `cdn.cloud-endpoint.net`
 
-**`1/27/2026 22:18:22.UTC` — `as-srv`**
+**`1/27/2026 22:18:22.UTC`  `as-srv`**
 
 Reviewing `DeviceNetworkEvents` for C2 infrastructure, a second domain `cdn.cloud-endpoint.net` was identified. Used specifically for staging and delivering the ransomware payload to `as-srv` in the final phase of the attack.
 
@@ -192,7 +192,7 @@ DeviceNetworkEvents
 
 **Answer:** `kill.bat`
 
-**`1/27/2026 21:02 UTC` — `as-pc2` — `david.mitchell`**
+**`1/27/2026 21:02 UTC` `as-pc2`  `david.mitchell`**
 
 `DeviceFileEvents` queried for `.bat` files on compromised hosts. `kill.bat` was downloaded from `sync.cloud-endpoint.net/kill.bat` via `bitsadmin` and executed to disable Windows Defender and delete shadow copies before ransomware deployment.
 
