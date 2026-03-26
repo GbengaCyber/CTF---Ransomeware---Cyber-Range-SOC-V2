@@ -257,6 +257,7 @@ DeviceRegistryEvents
 | project TimeGenerated, ActionType, InitiatingProcessCommandLine, RegistryValueData, RegistryValueName
 | order by TimeGenerated desc
 ```
+<img width="700" height="300" alt="image" src="https://github.com/user-attachments/assets/85310041-4d73-4468-8f9c-f087ebf16c4f" />
 
 ---
 
@@ -273,11 +274,12 @@ DeviceRegistryEvents
 ```kql
 DeviceProcessEvents
 | where TimeGenerated between (datetime(2026-01-27 21:00:00) .. datetime(2026-01-27 22:00:00))
-| where DeviceName has_any ("as-pc1", "as-pc2", "as-srv")
+| where DeviceName has_any ("as-pc2", "as-srv")
 | where AccountDomain != "nt authority"
 | where InitiatingProcessCommandLine has_any ("tasklist", "Get-Process lsass")
 | project TimeGenerated, ProcessCommandLine, InitiatingProcessCommandLine
 ```
+<img width="767" height="435" alt="image" src="https://github.com/user-attachments/assets/990dc838-60f2-49b1-85c6-dbee6833d4bf" />
 
 ---
 
@@ -300,6 +302,7 @@ DeviceEvents
 | project Timestamp, DeviceName, AccountName, AdditionalFields, InitiatingProcessFileName
 | order by Timestamp asc
 ```
+<img width="700" height="380" alt="image" src="https://github.com/user-attachments/assets/297cce29-cf4e-48a1-a96e-be1e2d9f1717" />
 
 ---
 
@@ -311,6 +314,16 @@ DeviceEvents
 
 AnyDesk relay connections identified across `as-srv`, `as-pc1`, and `as-pc2`. Pre-staged during *The Broker* compromise and reused 12 days later to re-enter the environment without re-exploitation.
 
+
+```kql
+DeviceFileEvents
+| where TimeGenerated between (datetime(2026-01-15 03:00:00) .. datetime(2026-01-28 23:00:00))
+| where DeviceName == "as-pc2" and RequestAccountName == "David.Mitchell"
+| where FileName endswith ".exe"
+| project Timestamp, DeviceName, FileName, FolderPath, InitiatingProcessFileName
+| order by Timestamp asc
+
+```
 ---
 
 ### 🚩 Q16 — Suspicious Execution Path
@@ -326,11 +339,12 @@ AnyDesk relay connections identified across `as-srv`, `as-pc1`, and `as-pc2`. Pr
 ```kql
 DeviceFileEvents
 | where TimeGenerated between (datetime(2026-01-15 03:00:00) .. datetime(2026-01-28 23:00:00))
-| where DeviceName == "as-pc2"
-| where FileName == "AnyDesk.exe"
+| where DeviceName == "as-pc2" and RequestAccountName == "David.Mitchell"
+| where FileName endswith ".exe"
 | project Timestamp, DeviceName, FileName, FolderPath, InitiatingProcessFileName
 | order by Timestamp asc
 ```
+<img width="848" height="395" alt="image" src="https://github.com/user-attachments/assets/67297c76-f39c-4c2c-beb7-ce6a570b7d17" />
 
 ---
 
@@ -353,6 +367,7 @@ DeviceNetworkEvents
 | project Timestamp, RemoteIP, RemoteUrl, RemotePort, DeviceName
 | sort by Timestamp desc
 ```
+<img width="700" height="323" alt="image" src="https://github.com/user-attachments/assets/77e39c31-0e0d-4290-83e5-7df3d67612f4" />
 
 ---
 
@@ -375,6 +390,7 @@ DeviceFileEvents
 | project Timestamp, DeviceName, FileName, FolderPath, InitiatingProcessFileName
 | order by Timestamp desc
 ```
+<img width="700" height="318" alt="image" src="https://github.com/user-attachments/assets/e00ec500-5c93-4a0d-bdf3-45e83ab93b97" />
 
 ---
 
@@ -387,6 +403,9 @@ DeviceFileEvents
 **`1/27/2026 20:22 UTC` — `as-pc2`**
 
 Confirmed from Q19 query. `wsync.exe` consistently written to `C:\ProgramData\wsync.exe` across all three drop events.
+
+
+<img width="700" height="318" alt="image" src="https://github.com/user-attachments/assets/743361b1-ca5b-4d65-a184-039d4c756b92" />
 
 ---
 
@@ -420,6 +439,7 @@ DeviceFileEvents
 | project Timestamp, DeviceName, FileName, FolderPath, SHA256
 | order by Timestamp asc
 ```
+<img width="900" height="361" alt="image" src="https://github.com/user-attachments/assets/333c7103-3ea1-4613-b411-5882bab95708" />
 
 ---
 
@@ -441,6 +461,7 @@ DeviceFileEvents
 | project Timestamp, DeviceName, FileName, FolderPath
 | order by Timestamp desc
 ```
+<img width="763" height="274" alt="image" src="https://github.com/user-attachments/assets/db0f7a45-4288-4bcc-b982-53a75a402c27" />
 
 ---
 
@@ -460,6 +481,7 @@ DeviceFileEvents
 | project Timestamp, DeviceName, FileName, SHA256
 | order by Timestamp desc
 ```
+<img width="750" height="340" alt="image" src="https://github.com/user-attachments/assets/d724af60-05ea-40ca-a6f4-d1910fb9e3cd" />
 
 ---
 
@@ -482,6 +504,7 @@ DeviceProcessEvents
 | project Timestamp, DeviceName, AccountName, FileName, ProcessCommandLine, InitiatingProcessFileName
 | order by Timestamp asc
 ```
+<img width="740" height="400" alt="image" src="https://github.com/user-attachments/assets/6ec4feaf-8266-4b4f-b0ba-3c54c73c36bf" />
 
 ---
 
@@ -506,6 +529,7 @@ DeviceNetworkEvents
 | project Timestamp, DeviceName, RemoteIP, RemotePort, InitiatingProcessFileName
 | order by Timestamp desc
 ```
+<img width="818" height="384" alt="image" src="https://github.com/user-attachments/assets/6846924d-4852-40a9-9e06-311ada0b8faf" />
 
 ---
 
@@ -515,7 +539,7 @@ DeviceNetworkEvents
 
 **Answer:** `as.srv.administrator`
 
-Compromised admin account used for all attacker activity on `as-srv`. First seen from `as-pc2` (`10.1.0.183`) on `1/15/2026` during *The Broker* and reused throughout the Akira deployment.
+Compromised admin account used for all attacker activity on `as-srv`. 
 
 ```kql
 DeviceLogonEvents
@@ -524,6 +548,7 @@ DeviceLogonEvents
 | where ActionType == "LogonSuccess"
 | order by TimeGenerated asc
 ```
+<img width="611" height="339" alt="image" src="https://github.com/user-attachments/assets/e6567863-8122-4462-a08c-596f08fb375b" />
 
 ---
 
@@ -540,11 +565,12 @@ DeviceLogonEvents
 ```kql
 DeviceProcessEvents
 | where DeviceName in~ ("as-srv", "as-pc2")
-| where Timestamp between (datetime(2026-01-27T18:00:00Z) .. datetime(2026-01-28T00:00:00Z))
+| where TimeGenerated between (datetime(2026-01-27 18:00:00) .. datetime(2026-01-27 23:00:00))
 | where ProcessCommandLine has_any ("DownloadFile", "Invoke-WebRequest", "iwr", "bitsadmin", "certutil")
 | project Timestamp, DeviceName, AccountName, FileName, ProcessCommandLine, InitiatingProcessFileName
 | order by Timestamp asc
 ```
+<img width="882" height="232" alt="image" src="https://github.com/user-attachments/assets/b7c592f7-9f04-4abe-a552-f0f98b5d84e6" />
 
 ---
 
@@ -557,12 +583,7 @@ DeviceProcessEvents
 After `bitsadmin` issues, the attacker switched to `Invoke-WebRequest`. Used across `as-pc2` and `as-srv` to download `wsync.exe`, `updater.exe`, `st.exe`, and `clean.bat`. URL obfuscation observed — domain splitting, base64 encoding, and variable splitting.
 
 ```kql
-DeviceEvents
-| where DeviceName in~ ("as-srv", "as-pc2")
-| where Timestamp between (datetime(2026-01-27T18:00:00Z) .. datetime(2026-01-28T00:00:00Z))
-| where ActionType has "PowerShell"
-| project Timestamp, DeviceName, AccountName, ActionType, AdditionalFields
-| order by Timestamp asc
+
 ```
 
 ---
@@ -579,13 +600,14 @@ DeviceEvents
 
 ```kql
 DeviceFileEvents
-| where DeviceName has_any ("as-pc1", "as-pc2", "as-srv")
+| where DeviceName has_any ("as-pc2", "as-srv")
 | where TimeGenerated between (datetime(2026-01-27 03:00:00) .. datetime(2026-01-27 23:00:00))
 | where FileName has_any (".rar", ".zip", ".7z")
 | where ActionType == "FileCreated"
 | project Timestamp, DeviceName, FileName, InitiatingProcessFileName, InitiatingProcessCommandLine, FolderPath
 | order by Timestamp desc
 ```
+<img width="792" height="310" alt="image" src="https://github.com/user-attachments/assets/a83e33a5-aa2d-497a-9ad6-f69bae9c3da4" />
 
 ---
 
@@ -599,13 +621,14 @@ SHA256 of `st.exe` retrieved via `InitiatingProcessSHA256`.
 
 ```kql
 DeviceFileEvents
-| where DeviceName has_any ("as-pc1", "as-pc2", "as-srv")
-| where TimeGenerated between (datetime(2026-01-27 03:00:00) .. datetime(2026-01-27 23:00:00))
+| where DeviceName has_any ("as-pc2", "as-srv")
+| where TimeGenerated between (datetime(2026-01-27 20:00:00) .. datetime(2026-01-27 23:00:00))
 | where FileName has_any (".rar", ".zip", ".7z")
 | where ActionType == "FileCreated"
 | project Timestamp, DeviceName, FileName, InitiatingProcessFileName, InitiatingProcessSHA256
 | order by Timestamp desc
 ```
+<img width="900" height="313" alt="image" src="https://github.com/user-attachments/assets/4a653493-22ad-488a-a308-8a19ab837f6e" />
 
 ---
 
@@ -618,6 +641,17 @@ DeviceFileEvents
 **`1/27/2026 22:24:09 UTC` — `as-srv`**
 
 `st.exe` created `exfil_data.zip` in `C:\Users\Public\`. Exfiltrated to `sync.cloud-endpoint.net` via `Invoke-WebRequest` POST at `22:24:55`.
+
+```kql
+DeviceFileEvents
+| where DeviceName has_any ("as-pc2", "as-srv")
+| where TimeGenerated between (datetime(2026-01-27 20:00:00) .. datetime(2026-01-27 23:00:00))
+| where FileName has_any (".rar", ".zip", ".7z")
+| where ActionType == "FileCreated"
+| project Timestamp, DeviceName, FileName, InitiatingProcessFileName, InitiatingProcessSHA256
+| order by Timestamp desc
+```
+<img width="789" height="312" alt="image" src="https://github.com/user-attachments/assets/c9a9a5d3-5e41-411f-a76c-fe2cf06d765d" />
 
 ---
 
@@ -634,10 +668,11 @@ DeviceFileEvents
 ```kql
 DeviceProcessEvents
 | where DeviceName == "as-srv"
-| where Timestamp between (datetime(2026-01-27T22:15:00Z) .. datetime(2026-01-27T22:20:00Z))
+| where TimeGenerated between (datetime(2026-01-27 22:00:00) .. datetime(2026-01-27 23:00:00))
 | project Timestamp, DeviceName, AccountName, FileName, FolderPath, ProcessCommandLine, InitiatingProcessFileName
 | order by Timestamp asc
 ```
+<img width="800" height="334" alt="image" src="https://github.com/user-attachments/assets/e8c578cf-208f-4c1c-9805-39c481d6e414" />
 
 ---
 
@@ -657,6 +692,7 @@ DeviceProcessEvents
 | project Timestamp, DeviceName, AccountName, FileName, InitiatingProcessFileName, InitiatingProcessSHA256
 | order by Timestamp asc
 ```
+<img width="900" height="240" alt="image" src="https://github.com/user-attachments/assets/2132faea-6f95-4533-82ee-88f8bb64cdc0" />
 
 ---
 
@@ -666,7 +702,7 @@ DeviceProcessEvents
 
 **Answer:** `powershell.exe`
 
-**`1/27/2026 22:18 UTC` — `as-srv`**
+**`1/27/2026 22:15 UTC` — `as-srv`**
 
 `DeviceFileEvents` filtered for `FileCreated` in the encryption window confirmed `powershell.exe` staged `updater.exe` into `C:\ProgramData\` immediately before execution.
 
@@ -678,6 +714,7 @@ DeviceFileEvents
 | project Timestamp, DeviceName, FileName, FolderPath, InitiatingProcessCommandLine, InitiatingProcessFileName
 | order by Timestamp asc
 ```
+<img width="900" height="300" alt="image" src="https://github.com/user-attachments/assets/4d459357-f296-4750-b466-1cd0a051be6d" />
 
 ---
 
@@ -693,12 +730,13 @@ Three recovery prevention commands executed in rapid succession via `cmd.exe` as
 
 ```kql
 DeviceProcessEvents
-| where DeviceName in~ ("as-srv", "as-pc1", "as-pc2")
+| where DeviceName in~ ("as-srv", "as-pc2")
 | where Timestamp between (datetime(2026-01-27T20:00:00Z) .. datetime(2026-01-28T00:00:00Z))
 | where FileName in~ ("vssadmin.exe", "wmic.exe", "wbadmin.exe", "bcdedit.exe")
 | project Timestamp, DeviceName, AccountName, FileName, ProcessCommandLine, InitiatingProcessFileName
 | order by Timestamp asc
 ```
+<img width="900" height="350" alt="image" src="https://github.com/user-attachments/assets/a3410af9-79f4-4885-9b42-f1c2a3d7543b" />
 
 ---
 
@@ -720,6 +758,7 @@ DeviceFileEvents
 | project Timestamp, DeviceName, FileName, InitiatingProcessFileName
 | order by Timestamp asc
 ```
+<img width="833" height="301" alt="image" src="https://github.com/user-attachments/assets/9de598fd-abed-479e-a7bd-ef6092b8def8" />
 
 ---
 
@@ -751,6 +790,7 @@ DeviceFileEvents
 | project Timestamp, DeviceName, ActionType, FileName, FolderPath, InitiatingProcessFileName, InitiatingProcessCommandLine
 | order by Timestamp asc
 ```
+<img width="748" height="269" alt="image" src="https://github.com/user-attachments/assets/65413bcc-ce1d-4cc8-a8d2-ea20bc798f26" />
 
 ---
 
@@ -895,4 +935,4 @@ DeviceFileEvents
 
 ---
 
-*Writeups are for educational purposes only.*
+
