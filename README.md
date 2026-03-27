@@ -2,7 +2,7 @@
 
 **Portfolio Summary**
 
-Investigated an Akira ransomware attack against a UK recruitment firm using Microsoft Defender for Endpoint and KQL. Traced a 12-day intrusion — from pre-staged AnyDesk persistence through credential dumping, Defender evasion, shadow copy deletion, and full file server encryption — resolving 22 investigation flags across the complete MITRE ATT&CK chain. Identified that the attacker re-entered via access never remediated from a prior compromise, and assessed that application control policy costing nothing (included in Windows Enterprise) would have blocked the remote access tool that made the entire attack possible.
+Investigated an Akira ransomware attack against a UK recruitment firm using Microsoft Defender for Endpoint and KQL. Traced a 12-day intrusion - from pre-staged AnyDesk persistence through credential dumping, Defender evasion, shadow copy deletion, and full file server encryption — resolving 22 investigation flags across the complete MITRE ATT&CK chain. Identified that the attacker re-entered via access never remediated from a prior compromise, and assessed that application control policy costing nothing (included in Windows Enterprise) would have blocked the remote access tool that made the entire attack possible.
 
 ---
 
@@ -50,12 +50,12 @@ Using IBM Cost of a Data Breach (2024) benchmarks, the average ransomware incide
 |---|---|---|
 | Application Control (WDAC / AppLocker) | Included in Windows Enterprise | Would have blocked AnyDesk.exe from C:\Users\Public entirely |
 | EDR alerting on Defender registry tampering | Included in M365 E5 / Defender P2 | Would have flagged DisableAntiSpyware change within minutes |
-| Privileged Access Management (PAM) | ~£8–12K/yr for SMB | Limits what a compromised user account can execute |
-| Immutable / offsite backups | ~£2–5K/yr | Shadow copy deletion would not have destroyed all recovery options |
-| Network segmentation | ~£5–10K one-time | Limits lateral movement from PC2 to the file server |
-| Full IR after initial compromise | ~£10–20K one-time | Re-entry via pre-staged AnyDesk would have been prevented |
+| Privileged Access Management (PAM) | £8–12K/yr for SMB | Limits what a compromised user account can execute |
+| Immutable / offsite backups | £2–5K/yr | Shadow copy deletion would not have destroyed all recovery options |
+| Network segmentation | £5–10K one-time | Limits lateral movement from PC2 to the file server |
+| Full IR after initial compromise | £10–20K one-time | Re-entry via pre-staged AnyDesk would have been prevented |
 
-**Cost of prevention:** ~£25–50K/year
+**Cost of prevention:** £25–50K/year
 **Cost of the incident:** £65K ransom demand + estimated £500K–£2M+ in downtime, recovery, legal, and GDPR exposure
 **ROI of prevention: ~15:1 to 40:1**
 
