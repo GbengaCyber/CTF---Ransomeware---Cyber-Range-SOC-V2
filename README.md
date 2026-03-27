@@ -1,3 +1,69 @@
+## Business Impact & Risk Assessment
+
+**Portfolio Summary**
+
+Investigated an Akira ransomware attack against a UK recruitment firm using Microsoft Defender for Endpoint and KQL. Traced a 12-day intrusion — from pre-staged AnyDesk persistence through credential dumping, Defender evasion, shadow copy deletion, and full file server encryption — resolving 22 investigation flags across the complete MITRE ATT&CK chain. Identified that the attacker re-entered via access never remediated from a prior compromise, and assessed that application control policy costing nothing (included in Windows Enterprise) would have blocked the remote access tool that made the entire attack possible.
+
+---
+
+### Business Context
+
+Ashford Sterling Recruitment, a staffing agency, was hit by an Akira ransomware affiliate using pre-staged access from a prior compromise — meaning the attacker had already been inside the network for **12 days** before deploying ransomware. Every business-critical folder on the file server was encrypted: Backups, Clients, Compliance, Contractors, and Payroll. The attacker then opened ransom negotiations demanding **£65,000**, threatening to publish stolen data within 72 hours — a classic double extortion play.
+
+---
+
+### Business Impact Assessment
+
+| Impact Category | Assessment |
+|---|---|
+| Full file server encryption (Clients, Payroll, Compliance, Contractors, Backups) | All business operations halted |
+| Double extortion — data theft + encryption | Even paying the ransom doesn't guarantee data stays private |
+| Ransom demand: £65,000 / counter: £11,000 | Active negotiation — financial loss confirmed |
+| 12-day dwell time before ransomware deployment | Data was being exfiltrated long before encryption |
+| Recruitment firm — client and candidate PII exposed | GDPR breach notification obligations triggered |
+| Payroll data encrypted and potentially stolen | Employee data at risk — legal and reputational liability |
+
+Using IBM Cost of a Data Breach (2024) benchmarks, the average ransomware incident costs **$5.13M** including downtime, recovery, ransom, legal fees, and regulatory fines. For a UK recruitment firm with GDPR exposure, ICO fines alone could reach **4% of global annual turnover**.
+
+---
+
+### Risk Assessment
+
+| Risk | Severity | Reason |
+|---|---|---|
+| 12-day attacker dwell time undetected | Critical | AnyDesk pre-staged on Day 1 — no alerting triggered |
+| AnyDesk deployed from C:\Users\Public | Critical | World-writable directory — no application control policy |
+| Defender disabled via registry (DisableAntiSpyware) | Critical | No alerting on security tool tampering |
+| Shadow copies deleted via kill.bat | Critical | Eliminated fastest recovery path — forced ransom negotiation |
+| LSASS credential dumping via named pipe | High | All domain credentials likely compromised |
+| Double extortion model | High | Data published regardless of ransom payment |
+| Pre-staged access reused from prior compromise | High | Original breach was never fully remediated |
+| Backups folder encrypted | High | Backup encryption = no clean restore point |
+
+**The most damaging finding:** The attacker re-entered using access staged 12 days earlier — meaning the initial compromise was never detected or fully contained. This is a containment and remediation failure, not just a detection failure.
+
+---
+
+### Cost-Benefit of Preventative Controls
+
+| Control | Estimated Annual Cost | Risk Mitigated |
+|---|---|---|
+| Application Control (WDAC / AppLocker) | Included in Windows Enterprise | Would have blocked AnyDesk.exe from C:\Users\Public entirely |
+| EDR alerting on Defender registry tampering | Included in M365 E5 / Defender P2 | Would have flagged DisableAntiSpyware change within minutes |
+| Privileged Access Management (PAM) | ~£8–12K/yr for SMB | Limits what a compromised user account can execute |
+| Immutable / offsite backups | ~£2–5K/yr | Shadow copy deletion would not have destroyed all recovery options |
+| Network segmentation | ~£5–10K one-time | Limits lateral movement from PC2 to the file server |
+| Full IR after initial compromise | ~£10–20K one-time | Re-entry via pre-staged AnyDesk would have been prevented |
+
+**Cost of prevention:** ~£25–50K/year
+**Cost of the incident:** £65K ransom demand + estimated £500K–£2M+ in downtime, recovery, legal, and GDPR exposure
+**ROI of prevention: ~15:1 to 40:1**
+
+---
+
+
+
+
 # Akira Ransomware — Ashford Sterling Recruitment
 
 
